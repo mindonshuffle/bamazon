@@ -7,9 +7,9 @@ CREATE TABLE products (
   item_id INT NOT NULL AUTO_INCREMENT,
   product_name VARCHAR(100) NULL,
   department_name VARCHAR(100) NULL,
-  price DECIMAL(10,2) NULL,
-  product_sales DECIMAL(10,2) NULL,
-  stock_quantity INT NULL,
+  price DECIMAL(10,2) NOT NULL DEFAULT 0,
+  product_sales DECIMAL(10,2) NOT NULL DEFAULT 0,
+  stock_quantity INT NOT NULL DEFAULT 0,
   PRIMARY KEY (item_id)
 );
 
@@ -52,17 +52,17 @@ VALUES ( "Apple Peeler", "Kitchen", 5, 100 );
 CREATE TABLE departments (
   department_id INT NOT NULL AUTO_INCREMENT,
   department_name VARCHAR(100) NULL,
-  overhead_costs DECIMAL(10,2) NULL,
+  overhead_costs DECIMAL(10,2) NOT NULL DEFAULT 0,
   
-  PRIMARY KEY (item_id)
+  PRIMARY KEY (department_id)
 
 );
 
-INSERT INTO departments ( department_name, overhead_costs );
+INSERT INTO departments ( department_name, overhead_costs )
 VALUES ( "Electronics", 10000.00 );
 
-INSERT INTO departments ( department_name, overhead_costs );
+INSERT INTO departments ( department_name, overhead_costs )
 VALUES ( "Home Decor", 5000.00 );
 
-INSERT INTO departments ( department_name, overhead_costs );
+INSERT INTO departments ( department_name, overhead_costs )
 VALUES ( "Kitchen", 7500.00 );

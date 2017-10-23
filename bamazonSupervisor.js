@@ -38,7 +38,7 @@ function supervisorMenu(){
 				break;
 
 			case 'Create New Department':
-				createDepartment();
+				addDeptPrompt();
 
 		}
 	
@@ -49,29 +49,70 @@ function supervisorMenu(){
 // Prints all products in DB to screen
 function displaySales(){
 
-	connection.query("SELECT item_id, product_name, price, stock_quantity FROM products", function(err, result) {
+	connection.query("SELECT *, SUM(product_sales) AS dept_sales FROM departments LEFT JOIN products ON departments.department_name = products.department_name GROUP BY departments.department_name;", function(err, result) {
 		if (err) throw err;
 
-		console.log('\nProducts Available: ')
-
+		var table = [["Department Name", "Overhead Costs", "Product Sales", "Total Profit"]];
+		
 		for (var i = 0; i < result.length; i++ ) {
 
-			var spacer = '';
-			if (result[i].product_name.length < 5 ){
-				spacer = '\t';
-			}
+			var current = [];
 
-	    	console.log( '#' + result[i].item_id + ':\t' + result[i].product_name +spacer +'  \t$' + result[i].price + '\t  In stock: ' + result[i].stock_quantity );  
+			current.push(result[i].department_name);
+			current.push(result[i].overhead_costs);
+			current.push(result[i].dept_sales);
+			current.push(parseFloat(result[i].dept_sales) - parseFloat(result[i].overhead_costs));
 
+			table.push(current);
 		}
 
-		return;
+		console.log('\nSales by Department: \n')
+		console.table(table[0], table.slice(1));
 
+		connection.end();
+		return;
 	});
 
 }
 
+function addDeptPrompt(){
 
+	console.log('');
+
+	inquirer.prompt([
+		{
+			name: 'name',
+			type: 'input',
+			message: 'Enter the name of the department to add: ',
+		},
+		{
+			name: 'overhead',
+			type: 'input',
+			message: 'Enter the overhead costs of this department: ', 
+		}
+	]).then( function(result){
+
+		addDept(result.name, result.overhead);
+
+	});
+}
+
+function addDept( name, overhead ){
+ 
+	connection.query(
+    	"INSERT INTO departments SET ?",
+	    {
+	    	department_name: name,
+	        overhead_costs: overhead
+	    },
+     	function(err, res) {
+	     	if (err) throw err;
+	     	console.log('\nNew product added succesfully.');
+	     	connection.end();
+	     	return;
+    	}
+	);
+};
 
 
 // --- --- MAIN LOGIC --- ---

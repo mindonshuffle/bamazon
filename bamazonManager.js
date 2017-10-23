@@ -225,6 +225,25 @@ function addProductPrompt(){
 	});
 }
 
+function addProduct( name, department, price, quantity ){
+ 
+	connection.query(
+    	"INSERT INTO products SET ?",
+	    {
+	    	product_name: name,
+	        department_name: department,
+	        price: price,
+	        stock_quantity: quantity
+	    },
+     	function(err, res) {
+	     	if (err) throw err;
+	     	console.log('\nNew product added succesfully.');
+	     	connection.end();
+	     	return;
+    	}
+	);
+};
+
 
 // --- --- MAIN LOGIC --- ---
 
