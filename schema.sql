@@ -55,4 +55,14 @@ CREATE TABLE departments (
   overhead_costs DECIMAL(10,2) NULL,
   
   PRIMARY KEY (item_id)
+
 );
+
+INSERT INTO departments ( department_name, overhead_costs );
+VALUES ( "Electronics", 10000.00 );
+
+INSERT INTO departments ( department_name, overhead_costs );
+VALUES ( "Home Decor", 5000.00 );
+
+INSERT INTO departments ( department_name, overhead_costs );
+VALUES ( "Kitchen", 7500.00 );

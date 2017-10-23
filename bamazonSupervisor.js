@@ -2,6 +2,7 @@
 
 var inquirer = require( 'inquirer' );
 var mysql = require( 'mysql' );
+require('console.table');
 
 var connection = mysql.createConnection({
 	host: "localhost",
