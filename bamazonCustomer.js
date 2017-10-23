@@ -99,13 +99,24 @@ function purchaseItem( item , quantity ){
 			      }
 			    ], function( err, result ) {
 			    	if (err) throw err;
-			    }
-		)};
+			    })
+			};
 
 		//display the cost of the transaction.
 
 		console.log('\nYou have purchased '+quantity +' of "' +result[0].product_name +'."');
 		console.log('Total cost of this transation: $' +eval(result[0].price * quantity) );
+
+		var query = connection.query("UPDATE products SET ? WHERE ?",
+			    [{
+			        product_sales: eval(result[0].product_sales+(result[0].price * quantity))
+			      },
+			      {
+			        item_id: item
+			      }
+			    ], function( err, result ) {
+			    	if (err) throw err;
+			    });
 
 		//prompt for next purchase !!! not yet implemented
 		connection.end();

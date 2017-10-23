@@ -25,29 +25,20 @@ function managerMenu(){
 			name: 'menu',
 			type: 'list',
 			message: 'Please select an option: ',
-			choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product']
+			choices: ['View Product Sales by Department', 'Create New Department']
 		}
 
 	]).then( function(result){
 	
 		switch(result.menu){
 			
-			case 'View Products for Sale':
-				displayProducts();
-				connection.end();
+			case 'View Products Sales by Department':
+				displaySales();
 				break;
 
-			case 'View Low Inventory':
-				lowInventory();
-				break;
+			case 'Create New Department':
+				createDepartment();
 
-			case 'Add to Inventory':
-				addInventoryDisplay();
-				break;
-
-			case 'Add New Product':
-				addProductPrompt();
-				
 		}
 	
 	})
@@ -155,80 +146,11 @@ function addInventoryPrompt(){
 	});
 }
 
-// add quantity of item to inventory
-function addInventory( item , quantity ){
-
-	connection.query("SELECT * FROM products WHERE item_id = ?", item, function(err, result) {
-		if (err) throw err;
-
-		// if invalid input, print error and stop
-		if ( result[0] === undefined ){
-			console.log("Please enter the Product # of an Available Product!");
-			connection.end();
-			return;
-		}
-
-		//otherwise, increase the inventory by quantity purchased
-		else {
-			var query = connection.query("UPDATE products SET ? WHERE ?",
-			    [{
-			        stock_quantity: eval(parseFloat(result[0].stock_quantity) + parseFloat(quantity))
-			      },
-			      {
-			        item_id: item
-			      }
-			    ], function( err, result ) {
-			    	if (err) throw err;
-			    }
-		)};
-
-		//display the cost of the transaction.
-
-		console.log('\nYou have added '+quantity +' to the inventory of "' +result[0].product_name +'."');
-
-		connection.end();
-		return;
-
-	});
-
-}
-
-function addProductPrompt(){
-
-	console.log('');
-
-	inquirer.prompt([
-		{
-			name: 'name',
-			type: 'input',
-			message: 'Enter the name of the product to add: ',
-		},
-		{
-			name: 'department',
-			type: 'input',
-			message: 'Enter the department for this product: ',
-		},
-		{
-			name: 'price',
-			type: 'input',
-			message: 'Enter the price of the product: ', 
-		},
-		{
-			name: 'quantity',
-			type: 'input',
-			message: 'Enter the number of items in inventory: ', 
-		}
-	]).then( function(result){
-
-		addProduct(result.name, result.department, result.price, result.quantity);
-
-	});
-}
 
 
 // --- --- MAIN LOGIC --- ---
 
-console.log('\n*** bamazon Manager Console *** *** *** *** ***\n')
+console.log('\n*** bamazon Management Console *** *** *** *** ***\n')
 
 connection.connect(function(err) {
 	if (err) throw err;
