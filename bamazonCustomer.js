@@ -126,11 +126,13 @@ function purchaseItem( item , quantity ){
 
 }
 
-
-
-
 // --- --- MAIN LOGIC --- ---
 
 console.log('\n*** Welcome to bamazon *** *** *** *** ***')
 
-displayProducts();
+connection.connect(function(err) {
+	if (err) throw err;
+	
+	displayProducts();
+	// connection.end()
+});

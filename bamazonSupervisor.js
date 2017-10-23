@@ -49,19 +49,25 @@ function supervisorMenu(){
 // Prints all products in DB to screen
 function displaySales(){
 
-	connection.query("SELECT *, SUM(product_sales) AS dept_sales FROM departments LEFT JOIN products ON departments.department_name = products.department_name GROUP BY departments.department_name;", function(err, result) {
+	connection.query("SELECT *, departments.department_name AS depname, SUM(product_sales) AS dept_sales FROM departments LEFT JOIN products ON departments.department_name = products.department_name GROUP BY departments.department_name;", function(err, result) {
 		if (err) throw err;
 
 		var table = [["Department Name", "Overhead Costs", "Product Sales", "Total Profit"]];
-		
+
 		for (var i = 0; i < result.length; i++ ) {
 
 			var current = [];
 
-			current.push(result[i].department_name);
+			current.push(result[i].depname);
 			current.push(result[i].overhead_costs);
-			current.push(result[i].dept_sales);
-			current.push(parseFloat(result[i].dept_sales) - parseFloat(result[i].overhead_costs));
+
+			var tempSales = result[i].dept_sales;
+			if (tempSales === null){
+				tempSales = 0;
+			}
+
+			current.push(tempSales);
+			current.push(parseFloat(tempSales) - parseFloat(result[i].overhead_costs));
 
 			table.push(current);
 		}
