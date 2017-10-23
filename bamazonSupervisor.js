@@ -113,7 +113,7 @@ function addDept( name, overhead ){
 	    },
      	function(err, res) {
 	     	if (err) throw err;
-	     	console.log('\nNew product added succesfully.');
+	     	console.log('\nNew Department added succesfully.');
 	     	connection.end();
 	     	return;
     	}
